@@ -36,7 +36,7 @@
 
 ## 💻 Sobre o Projeto
 
-Esta é a minha anding page e portfólio pessoal. Desenvolvida com foco em performance, responsividade e experiência do usuário (UX), a aplicação apresenta uma arquitetura limpa, navegação fluida por seções ativas (Intersection Observer) e suporte a layouts móveis otimizados.
+Esta é a minha landing page e portfólio pessoal. Desenvolvida com foco em performance, responsividade e experiência do usuário (UX), a aplicação apresenta uma arquitetura limpa, navegação fluida por seções ativas (Intersection Observer) e suporte a layouts móveis otimizados.
 
 ### ✨ Principais Recursos
 - 🚀 **Performance Extrema:** Construído sobre o ecossistema Next.js Server-Side Rendering (SSR) e otimização de ativos.

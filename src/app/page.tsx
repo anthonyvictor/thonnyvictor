@@ -8,7 +8,7 @@ import Projects from "@/app/components/pages/Projects";
 import Welcome from "@/app/components/pages/Welcome";
 import { Line } from "./components/atoms/Line";
 import { ToastContainer } from "react-toastify";
-import "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import About from "./components/pages/About";
 
