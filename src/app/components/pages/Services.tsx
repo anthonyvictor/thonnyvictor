@@ -1,91 +1,66 @@
 "use client";
 
-import { TbTargetArrow } from "react-icons/tb";
-import { AiFillCode } from "react-icons/ai";
-import { FaBalanceScale } from "react-icons/fa";
 import PageLayout from "../templates/PageLayout";
 import { TabsContainer } from "../organisms/TabsContainer";
 import { PageTitle } from "../molecules/PageTitle";
+import { services } from "@/app/data/services";
+import { principles } from "@/app/data/principles";
+import { motion, Variants } from "framer-motion";
+
+// Variantes para animações suaves em cascata (Container)
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1, // Anima cada filho com um atraso de 0.1s
+      delayChildren: 0.1, // Atraso inicial antes de começar a cascade
+    },
+  },
+};
+
+// Variantes para cada item (Título, Tabs, Cards)
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 15 }, // Começa invisível e um pouco abaixo
+  visible: {
+    opacity: 1,
+    y: 0, // Sobe para a posição original
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
 
 const Services = () => {
-  const services = [
-    {
-      label: "Websites",
-      route: "#websites-tab-item",
-      title: "SITES & LANDING PAGES",
-      description:
-        "Páginas modernas e otimizadas para converter visitantes em clientes. Design atrativo, 100% responsivo e alinhado com as melhores práticas de SEO e performance.",
-      centralImage: "/assets/img/services-websites.svg",
-      bgDesktop: "/assets/img/services-websites-bg-desktop.png",
-    },
-    {
-      label: "Web Apps",
-      route: "#webapps-tab-item",
-      title: "APLICAÇÕES WEB",
-      description:
-        "Sistemas robustos e sob medida acessíveis direto do navegador. Painéis administrativos, SaaS e plataformas escaláveis sem necessidade de instalação.",
-      centralImage: "/assets/img/services-webapps.svg",
-      bgDesktop: "/assets/img/services-webapps-bg-desktop.png",
-    },
-    {
-      label: "Mobile Apps",
-      route: "#mobileapps-tab-item",
-      title: "APPS MOBILE",
-      description:
-        "Aplicativos nativos e híbridos para Android e iOS. Foco total em usabilidade (UX), interfaces intuitivas e excelente velocidade de resposta.",
-      centralImage: "/assets/img/services-mobileapps.svg",
-      bgDesktop: "/assets/img/services-mobileapps-bg-desktop.png",
-    },
-    {
-      label: "Consultoria",
-      route: "#consulting-tab-item",
-      title: "CONSULTORIA DE TI",
-      description:
-        "Análise técnica detalhada, arquitetura de software e planejamento de soluções para otimizar processos, reduzir custos e acelerar o seu negócio.",
-      centralImage: "/assets/img/services-consulting.svg",
-      bgDesktop: "/assets/img/services-consulting-bg-desktop.png",
-    },
-  ];
-
-  const principles = [
-    {
-      icon: <TbTargetArrow className="text-2xl text-emerald-400" />,
-      label: "OBJETIVO",
-      description:
-        "Entregar soluções eficientes, escaláveis e sob medida para impulsionar o seu negócio com tecnologia de ponta.",
-    },
-    {
-      icon: <AiFillCode className="text-2xl text-teal-300" />,
-      label: "QUALIDADE",
-      description:
-        "Código limpo, arquitetura sólida, foco em alta performance e experiência de usuário totalmente fluida.",
-    },
-    {
-      icon: <FaBalanceScale className="text-2xl text-purple-400" />,
-      label: "TRANSPARÊNCIA",
-      description:
-        "Comunicação direta, alinhamento constante de prazos e compromisso total com os resultados acordados.",
-    },
-  ];
-
   return (
     <PageLayout id="services">
-      <div
+      {/* Envolvemos o conteúdo principal com o motion.div do container */}
+      <motion.div
         id="services-child"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible" // Aciona a animação quando entra na tela
+        viewport={{ once: true, margin: "-100px" }} // Anima apenas uma vez, com margem de segurança
         className="page w-full flex flex-col gap-8 max-w-6xl mx-auto flex-1 py-4"
       >
         {/* Cabeçalho */}
-        <PageTitle text1="Serviços &" text2="soluções" />
+        <motion.div variants={itemVariants}>
+          <PageTitle text1="Serviços &" text2="soluções" />
+        </motion.div>
 
         {/* Showcase de Serviços (Carrossel / Tabs) */}
-        <TabsContainer items={services} />
+        <motion.div variants={itemVariants}>
+          <TabsContainer items={services} />
+        </motion.div>
 
         {/* Seção de Princípios & Diferenciais */}
         <div className="flex flex-col gap-4 pt-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {principles.map((p) => (
-              <div
+            {principles.map((p, index) => (
+              <motion.div
                 key={p.label}
+                variants={itemVariants}
+                // Adicionamos um delay progressivo opcional aqui para os cards
+                // se eles entrarem na tela ao mesmo tempo (stagger externo)
+                transition={{ delay: 0.15 + index * 0.05 }}
                 className="group p-5 sm:p-6 rounded-2xl bg-zinc-900/40 border border-white/10 backdrop-blur-md flex flex-col gap-3 hover:border-emerald-500/30 transition-all duration-300 hover:-translate-y-1"
               >
                 <div className="flex items-center gap-3">
@@ -99,11 +74,11 @@ const Services = () => {
                 <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
                   {p.description}
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
-      </div>
+      </motion.div>
     </PageLayout>
   );
 };

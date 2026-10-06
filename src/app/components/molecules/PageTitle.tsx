@@ -1,3 +1,16 @@
+"use client";
+
+import { motion, Variants } from "framer-motion";
+
+interface PageTitleProps {
+  text1: string;
+  text2: string;
+  reverse?: boolean;
+  align?: "center" | "left" | "right";
+  size?: "sm" | "md" | "lg" | "xl";
+  divide?: boolean;
+}
+
 export const PageTitle = ({
   text1,
   text2,
@@ -5,17 +18,38 @@ export const PageTitle = ({
   align = "center",
   size = "lg",
   divide = false,
-}: {
-  text1: string;
-  text2: string;
-  reverse?: boolean;
-  align?: "center" | "left" | "right";
-  size?: "sm" | "md" | "lg" | "xl";
-  divide?: boolean;
-}) => {
+}: PageTitleProps) => {
+  // Variantes para o contêiner (orquestra a animação dos filhos)
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.1,
+      },
+    },
+  };
+
+  // Variantes para os elementos de texto
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
   return (
-    <div className={` space-y-3`}>
-      <h1
+    <div className="space-y-3">
+      <motion.h1
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
         className={`font-extrabold tracking-tight text-white text-center ${
           align === "left"
             ? "lg:text-left"
@@ -34,24 +68,32 @@ export const PageTitle = ({
       >
         {reverse ? (
           <>
-            <Coloured text={text1} />{" "}
-            {divide ? <hr className="opacity-0" /> : <></>}
-            <span>{text2}</span>
+            <Coloured text={text1} variants={itemVariants} />{" "}
+            {divide ? <hr className="opacity-0 my-1" /> : <></>}
+            <motion.span variants={itemVariants} className="inline-block">
+              {text2}
+            </motion.span>
           </>
         ) : (
           <>
-            <span>{text1}</span> <Coloured text={text2} />
+            <motion.span variants={itemVariants} className="inline-block">
+              {text1}
+            </motion.span>{" "}
+            <Coloured text={text2} variants={itemVariants} />
           </>
         )}
-      </h1>
+      </motion.h1>
     </div>
   );
 };
 
-const Coloured = ({ text }: { text: string }) => {
+const Coloured = ({ text, variants }: { text: string; variants?: any }) => {
   return (
-    <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-purple-400 bg-clip-text text-transparent">
+    <motion.span
+      variants={variants}
+      className="inline-block bg-gradient-to-r from-emerald-400 via-teal-300 to-purple-400 bg-clip-text text-transparent"
+    >
       {text}
-    </span>
+    </motion.span>
   );
 };

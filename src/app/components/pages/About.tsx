@@ -14,6 +14,29 @@ import { timelineSteps } from "@/app/data/timelineSteps";
 import { techCategories } from "@/app/data/techCategories";
 import { experiences } from "@/app/data/experiences";
 import { education } from "@/app/data/education";
+import { motion, Variants, AnimatePresence } from "framer-motion";
+
+// Variantes para animações suaves em cascata (Container)
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.3, // Anima cada filho com um atraso de 0.1s
+      delayChildren: 0.3, // Atraso inicial antes de começar a cascade
+    },
+  },
+};
+
+// Variantes para cada item/seção
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 15 }, // Começa invisível e um pouco abaixo
+  visible: {
+    opacity: 1,
+    y: 0, // Sobe para a posição original
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
 
 export const About = () => {
   // Timeline Interativa
@@ -21,22 +44,34 @@ export const About = () => {
 
   return (
     <PageLayout id="about">
-      <div
+      {/* Envolvemos o conteúdo principal com o motion.div do container para cascade inicial */}
+      <motion.div
         id="about-child"
-        className="w-full flex flex-col gap-16  max-w-6xl mx-auto"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        className="w-full flex flex-col gap-16 max-w-6xl mx-auto"
       >
         {/* Header da Página */}
-        <section className="flex flex-col items-center gap-3 text-center w-full">
+        <motion.section
+          variants={itemVariants}
+          className="flex flex-col items-center gap-3 text-center w-full"
+        >
           <PageTitle text1="Conheça mais" text2="sobre mim" reverse />
           <p className="text-sm sm:text-base text-zinc-400 max-w-2xl font-normal leading-relaxed">
             Desenvolvedor Full Stack apaixonado por transformar ideias complexas
             em produtos simples, robustos e realmente úteis para pessoas e
             empresas.
           </p>
-        </section>
+        </motion.section>
 
         {/* Linha do Tempo Interativa (História) */}
-        <section
+        <motion.section
+          variants={itemVariants}
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          initial="hidden"
           className="flex flex-col gap-8 bg-zinc-900/40 border border-white/10 
         rounded-3xl p-6 sm:p-8 backdrop-blur-md relative overflow-hidden"
         >
@@ -72,7 +107,7 @@ export const About = () => {
                 key={idx}
                 onClick={() => setActiveTimeline(idx)}
                 className={`flex-1 min-w-[120px] py-2.5 px-4 rounded-xl text-xs font-bold 
-                  transition-all duration-300 text-center cursor-pointer ${
+                  transition-all duration-300 text-center cursor-pointer whitespace-nowrap ${
                     activeTimeline === idx
                       ? `bg-gradient-to-r from-emerald-400 to-teal-300 text-zinc-950 
                     shadow-md shadow-emerald-500/20`
@@ -85,23 +120,36 @@ export const About = () => {
             ))}
           </div>
 
-          {/* Conteúdo Ativo do Timeline */}
-          <div
-            className="bg-zinc-950/50 p-5 rounded-2xl border border-white/5 flex 
-          flex-col gap-2 min-h-[120px] justify-center transition-all"
-          >
-            <h3 className="text-base sm:text-lg font-bold text-emerald-400 flex items-center gap-2">
-              <HiOutlineCheckCircle className="text-lg" />{" "}
-              {timelineSteps[activeTimeline].title}
-            </h3>
-            <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
-              {timelineSteps[activeTimeline].description}
-            </p>
-          </div>
-        </section>
+          {/* Conteúdo Ativo do Timeline com AnimatePresence para troca suave */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTimeline} // Importante para o AnimatePresence identificar a troca
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="bg-zinc-950/50 p-5 rounded-2xl border border-white/5 flex 
+            flex-col gap-2 min-h-[120px] justify-center transition-all"
+            >
+              <h3 className="text-base sm:text-lg font-bold text-emerald-400 flex items-center gap-2">
+                <HiOutlineCheckCircle className="text-lg" />{" "}
+                {timelineSteps[activeTimeline].title}
+              </h3>
+              <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+                {timelineSteps[activeTimeline].description}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+        </motion.section>
 
         {/* Qualificações & Stacks */}
-        <section className="flex flex-col gap-6 w-full">
+        <motion.section
+          variants={itemVariants}
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          initial="hidden"
+          className="flex flex-col gap-6 w-full"
+        >
           <div className="flex flex-col items-center sm:items-start gap-1">
             <h2 className="text-xl sm:text-2xl font-bold text-white">
               Qualificações & Stacks
@@ -114,8 +162,11 @@ export const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {techCategories.map((cat, idx) => {
               return (
-                <div
+                <motion.div
                   key={cat.title}
+                  variants={itemVariants}
+                  // Cascade suave entre os cards de categoria
+                  transition={{ delay: 0.5 + idx * 0.1 }}
                   className={`p-6 rounded-2xl bg-zinc-900/40 border border-white/10 backdrop-blur-md 
                     flex flex-col gap-4 hover:border-emerald-500/40 transition-all duration-300`}
                 >
@@ -159,7 +210,7 @@ export const About = () => {
                           />
                           <span
                             className="text-xs font-medium text-zinc-300 transition-colors duration-300 
-                            group-hover:text-[var(--tech-color)]"
+                            group-hover:text-[var(--tech-color)] select-none pointer-events-none"
                             style={{
                               color: undefined, // deixa a classe do Tailwind cuidar do estado normal
                             }}
@@ -170,13 +221,20 @@ export const About = () => {
                       );
                     })}
                   </div>
-                </div>
+                </motion.div>
               );
             })}
           </div>
-        </section>
+        </motion.section>
+
         {/* Experiências Profissionais */}
-        <section className="flex flex-col gap-6">
+        <motion.section
+          variants={itemVariants}
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          initial="hidden"
+          className="flex flex-col gap-6"
+        >
           <div className="flex flex-col items-center sm:items-start gap-1">
             <h2 className="text-xl sm:text-2xl font-bold text-white">
               Experiência Profissional
@@ -188,8 +246,11 @@ export const About = () => {
 
           <div className="flex flex-col gap-4">
             {experiences.map((exp, idx) => (
-              <div
+              <motion.div
                 key={idx}
+                variants={itemVariants}
+                // Cascade suave entre os cards de experiência
+                transition={{ delay: 0.5 + idx * 0.1 }}
                 className="p-6 rounded-2xl bg-zinc-900/40 border border-white/10 
                 backdrop-blur-md flex flex-col sm:flex-row sm:items-start justify-between 
                 gap-4 hover:border-white/20 transition-all"
@@ -220,13 +281,19 @@ export const About = () => {
                 >
                   {exp.period}
                 </span>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* Recomendação / Referência */}
-        <section className="flex flex-col gap-4">
+        <motion.section
+          variants={itemVariants}
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          initial="hidden"
+          className="flex flex-col gap-4"
+        >
           <div className="flex flex-col items-center sm:items-start gap-1">
             <h2 className="text-xl sm:text-2xl font-bold text-white">
               Recomendações & Referências
@@ -236,7 +303,8 @@ export const About = () => {
             </p>
           </div>
 
-          <div
+          <motion.div
+            variants={itemVariants}
             className="relative p-6 sm:p-8 rounded-3xl bg-zinc-900/50 border border-emerald-500/30 
           backdrop-blur-md flex flex-col gap-4 overflow-hidden"
           >
@@ -268,11 +336,17 @@ export const About = () => {
                 </span>
               </div>
             </div>
-          </div>
-        </section>
+          </motion.div>
+        </motion.section>
 
         {/* Formação Acadêmica */}
-        <section className="flex flex-col gap-4">
+        <motion.section
+          variants={itemVariants}
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          initial="hidden"
+          className="flex flex-col gap-4"
+        >
           <div className="flex items-center gap-2 text-zinc-400 text-xs font-bold uppercase tracking-widest">
             <HiOutlineAcademicCap className="text-emerald-400 text-base" />{" "}
             Formação Acadêmica
@@ -280,25 +354,28 @@ export const About = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {education.map((edu, idx) => (
-              <div
+              <motion.div
                 key={idx}
+                variants={itemVariants}
+                // Cascade suave entre os cartões de formação
+                transition={{ delay: 0.5 + idx * 0.1 }}
                 className="p-5 rounded-2xl bg-zinc-900/30 border border-white/5 flex flex-col 
-                justify-between gap-3 hover:border-white/10 transition-colors"
+                justify-between gap-3 hover:border-white/10 transition-colors "
               >
                 <div className="flex flex-col gap-1">
-                  <h4 className="text-xs font-bold text-white leading-snug">
+                  <h4 className="text-xs font-bold text-white leading-snug ">
                     {edu.degree}
                   </h4>
                   <span className="text-xs text-emerald-400 font-medium">
                     {edu.institution}
                   </span>
                 </div>
-                <span className="text-[11px] text-zinc-400">{edu.period}</span>
-              </div>
+                <span className="text-[11px] text-zinc-400 ">{edu.period}</span>
+              </motion.div>
             ))}
           </div>
-        </section>
-      </div>
+        </motion.section>
+      </motion.div>
     </PageLayout>
   );
 };

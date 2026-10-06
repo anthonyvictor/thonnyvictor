@@ -8,6 +8,29 @@ import { toast } from "react-toastify";
 import { HiPaperAirplane } from "react-icons/hi2";
 import { MdMail, MdWhatsapp, MdQuestionAnswer } from "react-icons/md";
 import { PageTitle } from "../molecules/PageTitle";
+import { motion, Variants } from "framer-motion";
+
+// Variantes para animações suaves em cascata (Container)
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1, // Anima cada filho com um atraso de 0.1s
+      delayChildren: 0.1, // Atraso inicial antes de começar a cascade
+    },
+  },
+};
+
+// Variantes para cada item/seção
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 15 }, // Começa invisível e um pouco abaixo
+  visible: {
+    opacity: 1,
+    y: 0, // Sobe para a posição original
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
 
 export const Contact = () => {
   const [isFormBlocked, setIsFormBlocked] = useState(false);
@@ -182,23 +205,34 @@ export const Contact = () => {
 
   return (
     <PageLayout id="contact">
-      <div
+      {/* Envolvemos o conteúdo principal com o motion.div do container para cascade inicial */}
+      <motion.div
         id="contact-child"
-        className="w-full flex flex-col gap-10  max-w-6xl mx-auto"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        className="w-full flex flex-col gap-10 max-w-6xl mx-auto"
       >
         {/* Cabeçalho */}
-        <section className="flex flex-col items-center gap-3 text-center w-full">
+        <motion.section
+          variants={itemVariants}
+          className="flex flex-col items-center gap-3 text-center w-full"
+        >
           <PageTitle text1="Vamos" text2="conversar" reverse />
           <p className="text-sm sm:text-base text-zinc-400 max-w-xl font-normal leading-relaxed">
             Tem uma ideia inovadora, precisa de uma consultoria ou quer
             construir uma aplicação do zero? Escolha o melhor canal abaixo!
           </p>
-        </section>
+        </motion.section>
 
         {/* Grid do Conteúdo (Cards + Formulário) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Lado Esquerdo: Cards de Acesso Rápido + FAQ */}
-          <div className="lg:col-span-5 flex flex-col gap-6">
+          <motion.div
+            variants={itemVariants}
+            className="lg:col-span-5 flex flex-col gap-6"
+          >
             <div className="flex flex-col gap-3">
               <h3 className="text-xs uppercase font-bold tracking-widest text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-full w-fit">
                 Atendimento Direto
@@ -251,8 +285,11 @@ export const Contact = () => {
               </h3>
               <div className="flex flex-col gap-3">
                 {faqs.map((faq, i) => (
-                  <div
+                  <motion.div
                     key={i}
+                    variants={itemVariants}
+                    // Cascade suave entre os cards de FAQ
+                    transition={{ delay: 0.2 + i * 0.1 }}
                     className="p-4 rounded-xl bg-zinc-900/20 border border-white/5 flex flex-col gap-1"
                   >
                     <span className="text-xs font-semibold text-zinc-200">
@@ -261,16 +298,20 @@ export const Contact = () => {
                     <p className="text-xs text-zinc-400 leading-relaxed">
                       {faq.a}
                     </p>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Lado Direito: Formulário EmailJS */}
-          <form
+          <motion.form
             id="contact-form"
             name="contact-form"
+            variants={itemVariants}
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            initial="hidden"
             className={`lg:col-span-7 w-full relative rounded-3xl bg-zinc-900/40 border border-white/10 backdrop-blur-md p-6 sm:p-8 shadow-2xl flex flex-col gap-4 transition-all duration-300 ${
               isFormBlocked ? "pointer-events-none select-none opacity-50" : ""
             }`}
@@ -410,9 +451,9 @@ export const Contact = () => {
                 </>
               )}
             </button>
-          </form>
+          </motion.form>
         </div>
-      </div>
+      </motion.div>
     </PageLayout>
   );
 };

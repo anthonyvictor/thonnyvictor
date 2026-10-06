@@ -9,19 +9,48 @@ import { HiArrowUpRight } from "react-icons/hi2";
 import { SocialMediaLinkIcon } from "../atoms/SocialMediaLinkIcon";
 import { PageTitle } from "../molecules/PageTitle";
 
+import { motion, Variants } from "framer-motion";
+
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.1,
+    },
+  },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, y: 18 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+};
 const Welcome = () => {
   return (
     <PageLayout id="home">
       <div
         id="home-child"
-        className="page w-full flex flex-col lg:grid lg:grid-cols-12 gap-6 pt-[2.6rem] lg:pt-24  lg:gap-8 items-stretch flex-1 justify-center place-content-center"
+        className="page w-full flex flex-col lg:grid lg:grid-cols-12 gap-6 pt-20 lg:pt-24 lg:gap-8 items-stretch flex-1 justify-center place-content-center"
       >
         {/* Conteúdo Principal */}
-        <aside className="lg:col-span-7  flex flex-col items-center lg:items-start text-center lg:text-left gap-3 sm:gap-4 w-full">
+        <motion.aside
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left gap-3 sm:gap-4 w-full"
+        >
           {/* Título Principal */}
-          <div className="space-y-1">
-            <h2 className="text-zinc-400 text-xs  font-light tracking-wide">
-              Olá! Me chamo Anthony Victor, e sou
+          <motion.div variants={itemVariants} className="space-y-1">
+            <h2 className="text-zinc-400 text-sm lg:text-lg font-light tracking-wide">
+              Olá! Me chamo{" "}
+              <span className="font-bold text-green-400">Anthony Victor</span>,
+              e sou
             </h2>
             <PageTitle
               text1="Desenvolvedor"
@@ -29,17 +58,23 @@ const Welcome = () => {
               size="lg"
               align="left"
             />
-          </div>
+          </motion.div>
 
           {/* Descrição */}
-          <p className="text-sm sm:text-base lg:text-lg text-zinc-300 max-w-2xl leading-relaxed font-normal">
-            Transformo ideias complexas em aplicações modernas, rápidas e
-            escaláveis. Especialista em construir soluções de alto impacto, do
-            banco de dados, backend à interface.
-          </p>
+          <motion.p
+            variants={itemVariants}
+            className="text-sm sm:text-base lg:text-lg text-zinc-300 max-w-2xl leading-relaxed font-normal"
+          >
+            Transformo ideias em aplicações modernas, rápidas e robustas.
+            Especialista em construir solucionar problemas do banco de dados à
+            interface.
+          </motion.p>
 
           {/* Chamada para Ação (CTA) e Avaliações */}
-          <div className="flex-col sm:flex-row items-center gap-3 sm:gap-6 w-full sm:w-auto pt-2 flex">
+          <motion.div
+            variants={itemVariants}
+            className="flex-col sm:flex-row items-center gap-3 sm:gap-6 w-full sm:w-auto pt-2 flex"
+          >
             <Link
               href={socialLinks[0].href}
               target="_blank"
@@ -59,17 +94,20 @@ const Welcome = () => {
                 100% Satisfação
               </span>
             </div>
-          </div>
+          </motion.div>
 
           {/* Mini Cards de Impacto para Clientes */}
-          <div className="grid grid-cols-3 gap-3 w-full pt-4 border-t border-white/10">
-            <div className="text-center lg:text-left">
+          <motion.div
+            variants={itemVariants}
+            className="grid grid-cols-3 gap-3 w-full pt-4 border-t border-white/10"
+          >
+            <div className="text-center lg:text-left hover:scale-110 origin-center select-none transition-transform">
               <p className="text-lg sm:text-2xl font-bold text-white">100%</p>
               <p className="text-[11px] sm:text-xs text-zinc-400">
                 Código Limpo
               </p>
             </div>
-            <div className="text-center lg:text-left">
+            <div className="text-center lg:text-left hover:scale-110 origin-center select-none transition-transform">
               <p className="text-lg sm:text-2xl font-bold text-emerald-400">
                 Entrega
               </p>
@@ -77,7 +115,7 @@ const Welcome = () => {
                 Dentro do Prazo
               </p>
             </div>
-            <div className="text-center lg:text-left">
+            <div className="text-center lg:text-left hover:scale-110 origin-center select-none transition-transform">
               <p className="text-lg sm:text-2xl font-bold text-purple-400">
                 Moderno
               </p>
@@ -85,13 +123,16 @@ const Welcome = () => {
                 Design & UX
               </p>
             </div>
-          </div>
-        </aside>
+          </motion.div>
+        </motion.aside>
 
         {/* Ilustração / Redes sociais */}
-        <aside
-          className="lg:col-span-5 relative w-full max-w-md 
-        lg:max-w-none flex-col justify-end flex gap-2"
+        <motion.aside
+          initial={{ opacity: 0, scale: 0.96 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
+          className="lg:col-span-5 relative w-full max-w-md lg:max-w-none flex-col justify-end flex gap-2"
         >
           {/* Imagem */}
           <div className="relative w-full aspect-square max-h-[280px] sm:max-h-[320px] lg:max-h-[350px] lg:flex items-center justify-center">
@@ -99,14 +140,14 @@ const Welcome = () => {
             <div className="absolute -top-2 -left-2 w-6 h-6 border-t-2 border-l-2 border-emerald-400 z-10" />
             <div className="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-emerald-400 z-10" />
 
-            {/* Content Container com Clip Path duplo (Corte no canto superior direito e inferior esquerdo) */}
+            {/* Content Container com Clip Path duplo */}
             <div className="relative w-full h-full bg-[#0e0a1f] p-1 [clip-path:polygon(20px_0,100%_0,100%_calc(100%-20px),calc(100%-20px)_100%,0_100%,0_20px)] bg-gradient-to-br from-emerald-500/40 via-purple-500/20 to-transparent">
               <div className="relative w-full h-full overflow-hidden [clip-path:polygon(19px_0,100%_0,100%_calc(100%-19px),calc(100%-19px)_100%,0_100%,0_19px)] bg-[#0e0a1f]">
                 <Image
                   src="/assets/img/euprogramando.png"
                   alt="Desenvolvedor trabalhando"
                   fill
-                  className="object-cover object-center filter brightness-95 contrast-105"
+                  className="object-cover object-center filter brightness-95 contrast-105 transition-transform duration-500 hover:scale-105"
                   priority
                 />
               </div>
@@ -119,7 +160,7 @@ const Welcome = () => {
               <SocialMediaLinkIcon key={item.href} item={item} />
             ))}
           </div>
-        </aside>
+        </motion.aside>
       </div>
     </PageLayout>
   );

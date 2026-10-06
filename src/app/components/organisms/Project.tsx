@@ -8,7 +8,7 @@ export const Project = ({ proj }: { proj: IProject }) => {
   return (
     <div
       key={proj.id}
-      className="flex flex-col justify-between p-6 rounded-2xl bg-zinc-900/60 border border-white/10 backdrop-blur-sm transition-all duration-300 hover:border-emerald-500/30 hover:-translate-y-1 group"
+      className="flex flex-col flex-1 justify-between p-6 rounded-2xl bg-zinc-900/60 border border-white/10 backdrop-blur-sm transition-all duration-300 hover:border-emerald-500/30 hover:-translate-y-1 group"
     >
       <div className="space-y-2">
         <ImgCarousel images={proj.media} title={proj.title} />
