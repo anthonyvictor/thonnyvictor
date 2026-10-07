@@ -35,7 +35,7 @@ const Welcome = () => {
     <PageLayout id="home">
       <div
         id="home-child"
-        className="page w-full flex flex-col lg:grid lg:grid-cols-12 gap-6 pt-20 lg:pt-24 lg:gap-8 items-stretch flex-1 justify-center place-content-center"
+        className="page w-full flex flex-col md:grid md:grid-cols-12 gap-6 pt-20 md:pt-24 md:gap-8 items-stretch flex-1 justify-center place-content-center"
       >
         {/* Conteúdo Principal */}
         <motion.aside
@@ -43,7 +43,7 @@ const Welcome = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
-          className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left gap-3 sm:gap-4 w-full"
+          className="md:col-span-7 flex flex-col items-center md:items-start text-center md:text-left gap-3 sm:gap-4 w-full"
         >
           {/* Título Principal */}
           <motion.div variants={itemVariants} className="space-y-1">
@@ -132,7 +132,7 @@ const Welcome = () => {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.1, ease: "easeOut" }}
-          className="lg:col-span-5 relative w-full max-w-md lg:max-w-none flex-col justify-end flex gap-2"
+          className="md:col-span-5 relative w-full  md:max-w-none flex-col justify-end flex gap-2"
         >
           {/* Imagem */}
           <div className="relative w-full aspect-square max-h-[280px] sm:max-h-[320px] lg:max-h-[350px] lg:flex items-center justify-center">
